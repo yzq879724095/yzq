@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>canvas</title>
+    <style>
+        .container{
+            width: 800px;
+            margin: 0 auto;
+        }
+        #canvas{
+            border: 1px #000 solid;
+        }
+    </style>
+    <script>
+        window.onload=function(){
+            function a2r(a){
+                return a*Math.PI/180;
+            }
+            function r2a(r){
+                return r*180/Math.PI;
+            }
+            let canvas=document.getElementById('canvas');
+            let gd=canvas.getContext('2d');
+            gd.beginPath();
+            gd.fillStyle='red';
+            gd.rect(50,50,100,200);
+            gd.fill()
+            //gd.translate(100,150)
+            //gd.rotate(a2r(40))
+            gd.strokeRect(-50,-100,100,200);
+            gd.beginPath();
+            gd.arc(200,300,50,0,2*Math.PI)
+            gd.fill()
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <canvas width="800" height="500" id="canvas"></canvas>
+    </div>
+</body>
+</html>

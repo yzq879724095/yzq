@@ -1,2 +1,2 @@
 # yzq
-#canvas相关的知识1111
+#canvas相关的知识

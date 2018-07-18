@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>canvas人物行走</title>
+    <style>
+        body {
+            text-align: center;
+        }
+
+        #canvas {
+            border: 1px #000 solid;
+        }
+    </style>
+    <script>
+        window.onload = function () {
+            function a2r(a) {
+                return a * Math.PI / 180;
+            }
+
+            function r2a(r) {
+                return r * 180 / Math.PI;
+            }
+            let canvas = document.getElementById('canvas');
+            let gd = canvas.getContext('2d');
+            let oImg = new Image()
+            oImg.src = './images/sprite.png';
+            let direction = {
+                'up': 4,
+                'down': 1,
+                'left': 2,
+                'right': 3
+            };
+            let keycode = {
+                '37': 'left',
+                '38': 'up',
+                '39': 'right',
+                '40': 'down'
+            }
+            let dir = 'down';
+            let cImg = 0;
+            let interval;
+            let speed = 10;
+            let oX = 0, oY = 0;
+            oImg.onload = function () {
+                gd.drawImage(this, 0, 0, 85, 113, 0, 0, 85, 113)
+                document.onkeydown = function (ev) {
+                    if (interval == null) {
+                        dir = keycode[ev.keyCode] || dir;
+                        console.log(direction[dir])
+                        interval = setInterval(function () {
+                            gd.clearRect(0, 0, canvas.width, canvas.height);
+                            switch (dir) {
+                                case 'up':
+                                    oY -= speed;
+                                    break;
+                                case 'down':
+                                    oY += speed;
+                                    break;
+                                case 'left':
+                                    oX -= speed;
+                                    break;
+                                case 'right':
+                                    oX += speed;
+                                    break;
+                            }
+                            if (oX < 0) {
+                                oX = 0;
+                            } else if (oX > canvas.width - 85) {
+                                oX = canvas.width - 85;
+                            } else if (oY < 0) {
+                                oY = 0;
+                            } else if (oY > canvas.height - 113) {
+                                oY = canvas.height - 113;
+                            }
+                            gd.drawImage(oImg, 85 * cImg, 113 * (direction[dir] - 1), 85, 113, oX, oY, 85, 113);
+                            cImg++;
+                            if (cImg == 3) {
+                                cImg = 0
+                            }
+                        }, 60)
+
+                    }
+
+                };
+                document.onkeyup = function () {
+                    clearInterval(interval)
+                    interval=null;
+                };
+            }
+        }
+    </script>
+</head>
+<body>
+<canvas width="800" height="500" id="canvas"></canvas>
+</body>
+</html>

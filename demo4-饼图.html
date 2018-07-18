@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>canvas人物行走</title>
+    <style>
+        body {
+            text-align: center;
+        }
+
+        #canvas {
+            border: 1px #000 solid;
+        }
+    </style>
+    <script>
+        window.onload = function () {
+            function a2r(a) {
+                return a * Math.PI / 180;
+            }
+
+            function r2a(r) {
+                return r * 180 / Math.PI;
+            }
+
+            let canvas = document.getElementById('canvas');
+            let gd = canvas.getContext('2d');
+            gd.font = '15px 微软雅黑'
+            let data = [834, 745, 200, 700, 500];
+            let startAngle = 0;
+            let endAngle = 0;
+            let colors = ['#ff0', '#f00', '#0f0', '#00f', '#0ff']
+            let radius = 100;
+            let centerCoordinates = [400, 250]
+            let sum = data.reduce((temp, item, index) => {
+                return temp + item;
+            })
+            let percent=data.map((item,index)=>{
+                return (item/sum*100).toFixed(2)+"%";
+            })
+            let angle = data.map((item, index) => {
+                return item / sum * 360;
+            })
+            console.log(angle)
+            //angle.length=1
+            angle.forEach((item, index) => {
+                endAngle += item;
+                drawFan(startAngle, endAngle, colors[index], percent[index])
+            })
+
+            //drawFan(30,60,'#ff0')
+            function drawFan(lastAngle, endAngle, ccolor, data) {
+                let sx = centerCoordinates[0] + radius * Math.sin(a2r(startAngle))
+                let sy = centerCoordinates[1] - radius * Math.cos(a2r(startAngle))
+                let tx = centerCoordinates[0] + radius * Math.sin(a2r(startAngle + (endAngle - startAngle) / 2))
+                let ty = centerCoordinates[1] - radius * Math.cos(a2r(startAngle + (endAngle - startAngle) / 2))
+                let txt = data;
+                gd.beginPath()
+                gd.fillStyle = '#000';
+                console.log(gd.measureText(txt))
+                if (tx > centerCoordinates[0] && ty < centerCoordinates[1]) {
+                    gd.fillText(data, tx+10, ty)
+                } else if (tx > centerCoordinates[0] && ty >centerCoordinates[1]) {
+                    gd.fillText(data, tx+10, ty+20)
+                } else if (tx< centerCoordinates[0] && ty < centerCoordinates[1]) {
+                    gd.fillText(data, tx-gd.measureText(txt).width-10, ty)
+                } else if (tx < centerCoordinates[0] && ty > centerCoordinates[1]) {
+                    gd.fillText(data, tx-gd.measureText(txt).width-10, ty+20)
+                }
+
+                gd.beginPath()
+                gd.moveTo(centerCoordinates[0], centerCoordinates[1])
+                gd.lineTo(sx, sy);
+                gd.arc(centerCoordinates[0], centerCoordinates[1], radius, a2r(lastAngle - 90), a2r(endAngle - 90), false)
+                gd.closePath();
+                //gd.stroke();
+                gd.fillStyle = ccolor;
+                gd.fill();
+                startAngle = endAngle
+            }
+        }
+    </script>
+</head>
+<body>
+<canvas width="800" height="500" id="canvas"></canvas>
+</body>
+</html>

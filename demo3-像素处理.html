@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>canvas人物行走</title>
+    <style>
+        body {
+            text-align: center;
+        }
+
+        #canvas {
+            border: 1px #000 solid;
+        }
+    </style>
+    <script>
+        window.onload = function () {
+            function a2r(a) {
+                return a * Math.PI / 180;
+            }
+            function r2a(r) {
+                return r * 180 / Math.PI;
+            }
+            let canvas = document.getElementById('canvas');
+            let gd = canvas.getContext('2d');
+            let oImg = new Image()
+            oImg.src = './images/sence.jpg';
+            let ImageData;
+            let oW=canvas.width;
+            let oH=canvas.height;
+            let num=0;
+            oImg.onload=function(){
+                gd.drawImage(this,0,0)
+                ImageData=gd.getImageData(0,0,oW,oH)
+                console.log(ImageData.data)
+            }
+            oBtn1=document.getElementById('btn1')
+            oBtn2=document.getElementById('btn2')
+            oBtn3=document.getElementById('btn3')
+            oBtn4=document.getElementById('btn4')
+            oBtn5=document.getElementById('btn5')
+            oBtnSave=document.getElementById('save')
+            oBtn1.onclick=function(){
+                for (j=0,len1=canvas.height;j<len1;j++){
+                    for (i=0,len2=canvas.width;i<len2;i++){
+                        avg=(ImageData.data[(j*oW+i)*4+0]+ImageData.data[(j*oW+i)*4+1]+ImageData.data[(j*oW+i)*4+2])/3
+                        ImageData.data[(j*oW+i)*4+0]=ImageData.data[(j*oW+i)*4+1]=ImageData.data[(j*oW+i)*4+2]=avg;
+                   }
+                }
+                gd.putImageData(ImageData,0,0)
+            }
+            oBtn2.onclick=function(){
+                for (j=0,len1=canvas.height;j<len1;j++){
+                    for (i=0,len2=canvas.width;i<len2;i++){
+                        ImageData.data[(j*oW+i)*4+1]=ImageData.data[(j*oW+i)*4+2]=0
+                   }
+                }
+                gd.putImageData(ImageData,0,0)
+            }
+            oBtn3.onclick=function(){
+                 for (j=0,len1=canvas.height;j<len1;j++){
+                     for (i=0,len2=canvas.width;i<len2;i++){
+                         ImageData.data[(j*oW+i)*4+0]=ImageData.data[(j*oW+i)*4+2]=0
+                    }
+                 }
+                 gd.putImageData(ImageData,0,0)
+            }
+            oBtn4.onclick=function(){
+                for (j=0,len1=canvas.height;j<len1;j++){
+                    for (i=0,len2=canvas.width;i<len2;i++){
+                        ImageData.data[(j*oW+i)*4+0]=ImageData.data[(j*oW+i)*4+1]=0
+                   }
+                }
+                gd.putImageData(ImageData,0,0)
+            }
+            oBtn5.onclick=function(){
+                for (j=0,len1=canvas.height;j<len1;j++){
+                    for (i=0,len2=canvas.width;i<len2;i++){
+                        ImageData.data[(j*oW+i)*4+2]=0
+                   }
+                }
+                gd.putImageData(ImageData,0,0)
+            }
+            oBtnSave.onclick=function(){
+                let img=document.getElementById('img');
+                let imgSrc=canvas.toDataURL();
+                img.src=imgSrc;
+            }
+            }
+    </script>
+</head>
+<body>
+<button id="btn1">变灰</button>
+<button id="btn2">变红</button>
+<button id="btn3">变绿</button>
+<button id="btn4">变蓝</button>
+<button id="btn5">变黄</button>
+<button id="save">保存</button><br>
+<img src="" alt="" id="img">
+<canvas width="900" height="600" id="canvas"></canvas>
+</body>
+</html>
